@@ -3,9 +3,9 @@ import { StyleSheet, View, Text } from 'react-native';
 export default function Page() {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
+      <Text>Settings Screen</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
