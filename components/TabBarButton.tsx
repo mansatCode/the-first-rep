@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
-import { Text, PlatformPressable } from '@react-navigation/elements';
+import { PlatformPressable } from '@react-navigation/elements';
 import { icon } from '@/constants/icon';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Colors from '@/utilities/color';
 
 export default function TabBarButton({
     onPress,
@@ -53,10 +54,10 @@ export default function TabBarButton({
         >
             <Animated.View style={animatedIconStyle}>
                 {icon[routeName]({
-                    color: isFocused ? '#FFF' : '#222'
+                    color: isFocused ? Colors.WHITE : Colors.DEEP_BLUE
                 })}
             </Animated.View>
-            <Animated.Text style={[{ color: isFocused ? '#673ab7' : '#222', fontSize: 12, marginTop: 2 }, animatedTextStyle]}>{label}</Animated.Text>
+            <Animated.Text style={[{ color: isFocused ? Colors.PURPLE : Colors.DEEP_BLUE, fontSize: 12, marginTop: 2 }, animatedTextStyle]}>{label}</Animated.Text>
         </PlatformPressable>
     )
 }

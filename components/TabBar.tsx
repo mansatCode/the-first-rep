@@ -3,6 +3,7 @@ import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
 import React, { useState } from 'react';
 import TabBarButton from './TabBarButton';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Colors from '@/utilities/color';
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const [dimensions, setDimensions] = useState({ height: 20, width: 100 })
@@ -28,7 +29,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     <View onLayout={onTabBarLayout} style={styles.tabBar}>
       <Animated.View style={[animatedStyle, {
         position: 'absolute',
-        backgroundColor: '#723FEB',
+        backgroundColor: Colors.PURPLE,
         borderRadius: 30,
         marginHorizontal: 12,
         height: dimensions.height - 15,
@@ -72,7 +73,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             onLongPress={onLongPress}
             isFocused={isFocused}
             routeName={route.name}
-            color={isFocused ? '#FFF' : '#222'}
+            color={isFocused ? Colors.WHITE : Colors.DEEP_BLUE}
             label={label}
           />
         );
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.WHITE,
     marginHorizontal: 40,
     paddingVertical: 15,
     borderRadius: 35,
