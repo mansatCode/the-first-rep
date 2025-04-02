@@ -22,10 +22,10 @@ export default function RootLayout() {
     return null;
   }
 
+  //<Stack.Screen name="(tabs)" options={{ headerShown: false }} /> 
+  // Rename tabs dir to (tabs)
   return (
     <Stack screenOptions={{ headerShown: false }} >
-      {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> 
-      Rename tabs dir to (tabs) */}
     </Stack>
   );
 }

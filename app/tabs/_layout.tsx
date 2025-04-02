@@ -7,11 +7,9 @@ import { StatusBar } from 'react-native';
 export default function TabLayout() {
   return (
     <>
-      {/* Status bar configuration for all tabs */}
       <StatusBar backgroundColor={Colors.DEEP_BLUE} barStyle="light-content" />
       <Tabs tabBar={(props) => <TabBar {...props} />}
         screenOptions={{
-          // Default header styles for all tabs
           headerStyle: { backgroundColor: Colors.DEEP_BLUE },
           headerTitleStyle: { color: Colors.WHITE, fontSize: 32 }
         }}

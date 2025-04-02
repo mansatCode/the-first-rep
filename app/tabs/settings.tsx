@@ -26,7 +26,7 @@ export default function Page() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.settingsContainer}>
           <SettingItem
-            icon={settingIcons.bell()}  // icon name to map in /constants/icon.tsx
+            icon={settingIcons.bell()}
             title="Reminders"
             onPress={() => handleSettingPress('Reminders')}
           />

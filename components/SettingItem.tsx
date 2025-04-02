@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface SettingItemProps {
     icon: ReactNode;
@@ -17,11 +18,10 @@ const SettingItem = ({ icon, title, onPress }: SettingItemProps) => {
     return (
         <TouchableOpacity style={styles.settingItem} onPress={onPress}>
             <View style={styles.settingItemLeft}>
-                <View> {icon} </View>
+                {icon}
                 <Text style={styles.settingTitle}>{title}</Text>
             </View>
-            {/* Chevron icon */}
-            <Text style={styles.chevron}>›</Text>
+            <Entypo name="chevron-small-right" size={24} color={Colors.WHITE} />
         </TouchableOpacity>
     );
 };
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 4,
+        paddingVertical: 16,
         paddingHorizontal: 32,
         borderRadius: 8,
         marginBottom: 8,

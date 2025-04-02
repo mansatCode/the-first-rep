@@ -54,7 +54,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             canPreventDefault: true,
           });
 
-          if (!isFocused && !event.defaultPrevented) {
+          if (!isFocused ? !event.defaultPrevented : null) {
             navigation.navigate(route.name, route.params);
           }
         };
