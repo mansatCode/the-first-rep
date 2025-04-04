@@ -39,7 +39,6 @@ export default function Page() {
           </View>
           <TouchableOpacity
             style={styles.locationButton}
-            // onPress={handleLocationButtonPress}
             onPress={() => navigation.navigate('leaderboard')}
           >
             <MaterialIcons name="leaderboard" size={24} color={Colors.PURPLE} />

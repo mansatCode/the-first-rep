@@ -11,8 +11,11 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import LessonCard, { Lesson } from '../../components/LessonCard';
 import DumbbellSvg from '../../assets/images/dumbbell.svg';
+import GoalsCard from '../../components/GoalsCard';
 
 export default function Page() {
+  const [showManageGoals, setShowManageGoals] = useState(false);
+
   // Sample lessons data with read status
   const [lessons, setLessons] = useState<Lesson[]>([
     {
@@ -44,6 +47,11 @@ export default function Page() {
     );
   };
 
+  // Handle manage goals press
+  const handleManageGoalsPress = () => {
+    setShowManageGoals(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.content}>
@@ -70,6 +78,9 @@ export default function Page() {
             />
           ))}
         </View>
+
+        {/* Goals Section */}
+        <GoalsCard onManageGoalsPress={handleManageGoalsPress} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -80,7 +91,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.DEEP_BLUE,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
   content: {
     flex: 1,
