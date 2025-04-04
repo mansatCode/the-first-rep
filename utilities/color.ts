@@ -6,6 +6,7 @@ const Colors = {
     WHITE: '#E0E1DD',
     PURPLE: '#6C63FF',
     GREEN: "#6FD08C",
+    CHECKED_GREEN: "#3C6A5B",
     ORANGE: '#C28B37',
     RED: "#CE4444",
 }
