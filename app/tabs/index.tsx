@@ -12,8 +12,10 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import LessonCard, { Lesson } from '../../components/LessonCard';
 import DumbbellSvg from '../../assets/images/dumbbell.svg';
 import GoalsCard from '../../components/GoalsCard';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Page() {
+  const navigation = useNavigation();
   const [showManageGoals, setShowManageGoals] = useState(false);
 
   // Sample lessons data with read status
@@ -50,6 +52,7 @@ export default function Page() {
   // Handle manage goals press
   const handleManageGoalsPress = () => {
     setShowManageGoals(true);
+    navigation.navigate('manageGoals');
   };
 
   return (
