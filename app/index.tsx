@@ -93,7 +93,7 @@ export default index
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.DEEP_BLUE, // Dark background color from the image
+        backgroundColor: Colors.DEEP_BLUE,
     },
     content: {
         flex: 1,

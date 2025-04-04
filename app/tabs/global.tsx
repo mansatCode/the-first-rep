@@ -11,12 +11,10 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/utilities/color';
 import { mapDarkStyle } from '@/constants/mapDarkStyle';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Page() {
-  const handleLocationButtonPress = () => {
-    console.log('Location button pressed');
-  };
-
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mapContainer}>
@@ -41,7 +39,8 @@ export default function Page() {
           </View>
           <TouchableOpacity
             style={styles.locationButton}
-            onPress={handleLocationButtonPress}
+            // onPress={handleLocationButtonPress}
+            onPress={() => navigation.navigate('leaderboard')}
           >
             <MaterialIcons name="leaderboard" size={24} color={Colors.PURPLE} />
           </TouchableOpacity>
