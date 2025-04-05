@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { Stack } from 'expo-router';
 import {
     SafeAreaView,
     StyleSheet,
@@ -8,33 +8,38 @@ import {
     Modal,
     View,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Colors from '@/utilities/color';
-
-type ManageGoalsParams = {
-    workoutsPerWeek: string;
-};
+import { useGoals } from '../contexts/GoalsContext';
 
 const manageGoals = () => {
-    const params = useLocalSearchParams<ManageGoalsParams>();
-    const initialWorkoutsPerWeek = params.workoutsPerWeek
-        ? parseInt(params.workoutsPerWeek, 10)
-        : 0;
+    const navigation = useNavigation();
+    const { weeklyGoal, setWeeklyGoal } = useGoals();
 
-    // State for workout count and modal visibility
-    const [workoutsPerWeek, setWorkoutsPerWeek] = useState(initialWorkoutsPerWeek);
+    // State for modal visibility and local workouts value
     const [modalVisible, setModalVisible] = useState(false);
+    const [localWorkoutsPerWeek, setLocalWorkoutsPerWeek] = useState(weeklyGoal);
+
+    // Initialize local state from context
+    useEffect(() => {
+        setLocalWorkoutsPerWeek(weeklyGoal);
+    }, [weeklyGoal]);
 
     const handlePress = () => {
         setModalVisible(true);
     };
 
     const handleWorkoutSelection = (number: number) => {
-        setWorkoutsPerWeek(number);
+        setLocalWorkoutsPerWeek(number);
         setModalVisible(false);
     };
 
     const handleSave = () => {
-        console.log("Save clicked");
+        console.log("Save clicked, updating weekly goal to:", localWorkoutsPerWeek);
+        // Update the context value
+        setWeeklyGoal(localWorkoutsPerWeek);
+        // Navigate back
+        navigation.goBack();
     };
 
     // Generate options 1-7 for workout selection
@@ -58,7 +63,7 @@ const manageGoals = () => {
                 onPress={handlePress}
             >
                 <Text style={styles.settingLabel}>Workouts / Week</Text>
-                <Text style={styles.settingValue}>{workoutsPerWeek}</Text>
+                <Text style={styles.settingValue}>{localWorkoutsPerWeek}</Text>
             </TouchableOpacity>
 
             {/* Workout Selection Modal */}
@@ -78,13 +83,13 @@ const manageGoals = () => {
                                     key={item.toString()}
                                     style={[
                                         styles.optionButton,
-                                        workoutsPerWeek === item && styles.selectedOptionButton
+                                        localWorkoutsPerWeek === item && styles.selectedOptionButton
                                     ]}
                                     onPress={() => handleWorkoutSelection(item)}
                                 >
                                     <Text style={[
                                         styles.optionText,
-                                        workoutsPerWeek === item && styles.selectedOptionText
+                                        localWorkoutsPerWeek === item && styles.selectedOptionText
                                     ]}>
                                         {item}
                                     </Text>

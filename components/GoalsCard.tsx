@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -9,21 +9,28 @@ import { Ionicons } from '@expo/vector-icons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import Colors from '@/utilities/color';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useGoals } from '../contexts/GoalsContext';
 
 interface GoalsCardProps {
-    weeklyGoal: number;
-    onManageGoalsPress: (weeklyGoal: number) => void;
+    onManageGoalsPress: () => void;
 }
 
-const GoalsCard: React.FC<GoalsCardProps> = ({ weeklyGoal, onManageGoalsPress }) => {
-    // Mock data - could be props in a real app
-    const workoutsRemaining = 1;
-    const weeklyStreak = 1;
-    const completedWorkouts = 1;
+const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
+    // Get values from context instead of props
+    const { weeklyGoal, workoutsCompleted } = useGoals();
+
+    // Debug log when weeklyGoal changes
+    useEffect(() => {
+        console.log("GoalsCard: Weekly goal updated to", weeklyGoal);
+    }, [weeklyGoal]);
+
+    // Calculate remaining workouts
+    const workoutsRemaining = Math.max(0, weeklyGoal - workoutsCompleted);
+    const weeklyStreak = 1; // This could also come from context if needed
 
     // Calculate progress percentage for the circle
     const progressPercentage = weeklyGoal > 0
-        ? Math.min(100, (completedWorkouts / weeklyGoal) * 100)
+        ? Math.min(100, (workoutsCompleted / weeklyGoal) * 100)
         : 0;
 
     return (
@@ -82,8 +89,8 @@ const GoalsCard: React.FC<GoalsCardProps> = ({ weeklyGoal, onManageGoalsPress })
             <TouchableOpacity
                 style={styles.manageButton}
                 onPress={() => {
-                    console.log('Manage Goals button pressed');
-                    onManageGoalsPress(weeklyGoal);
+                    console.log('Manage Goals button pressed, current weekly goal:', weeklyGoal);
+                    onManageGoalsPress();
                 }}
             >
                 <Text style={styles.manageButtonText}>Manage Goals</Text>
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     manageButtonText: {
-        color: Colors.WHITE,
+        color: 'white',
         fontSize: 15,
         fontWeight: '600',
     },

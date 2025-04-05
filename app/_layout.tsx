@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { GoalsProvider } from '../contexts/GoalsContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -26,7 +27,9 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false, navigationBarColor: colorScheme === "dark" ? Colors["dark"].background : Colors["light"].background }} >
-    </Stack>
+    <GoalsProvider>
+      <Stack screenOptions={{ headerShown: false, navigationBarColor: colorScheme === "dark" ? Colors["dark"].background : Colors["light"].background }} >
+      </Stack>
+    </GoalsProvider>
   );
 }
