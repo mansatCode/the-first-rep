@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import {
     SafeAreaView,
     StyleSheet,
@@ -10,9 +10,18 @@ import {
 } from 'react-native';
 import Colors from '@/utilities/color';
 
+type ManageGoalsParams = {
+    workoutsPerWeek: string;
+};
+
 const manageGoals = () => {
+    const params = useLocalSearchParams<ManageGoalsParams>();
+    const initialWorkoutsPerWeek = params.workoutsPerWeek
+        ? parseInt(params.workoutsPerWeek, 10)
+        : 0;
+
     // State for workout count and modal visibility
-    const [workoutsPerWeek, setWorkoutsPerWeek] = useState(0);
+    const [workoutsPerWeek, setWorkoutsPerWeek] = useState(initialWorkoutsPerWeek);
     const [modalVisible, setModalVisible] = useState(false);
 
     const handlePress = () => {

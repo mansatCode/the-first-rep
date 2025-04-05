@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function Page() {
   const navigation = useNavigation();
   const [showManageGoals, setShowManageGoals] = useState(false);
+  const [weeklyGoal, setWeeklyGoal] = useState(2);
 
   // Sample lessons data with read status
   const [lessons, setLessons] = useState<Lesson[]>([
@@ -50,9 +51,9 @@ export default function Page() {
   };
 
   // Handle manage goals press
-  const handleManageGoalsPress = () => {
+  const handleManageGoalsPress = (currentWeeklyGoal: number) => {
     setShowManageGoals(true);
-    navigation.navigate('manageGoals');
+    navigation.navigate('manageGoals', { workoutsPerWeek: currentWeeklyGoal });
   };
 
   return (
@@ -83,7 +84,10 @@ export default function Page() {
         </View>
 
         {/* Goals Section */}
-        <GoalsCard onManageGoalsPress={handleManageGoalsPress} />
+        <GoalsCard
+          weeklyGoal={weeklyGoal}
+          onManageGoalsPress={handleManageGoalsPress}
+        />
       </ScrollView>
     </SafeAreaView>
   );

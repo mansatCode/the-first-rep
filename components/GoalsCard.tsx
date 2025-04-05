@@ -11,13 +11,13 @@ import Colors from '@/utilities/color';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 interface GoalsCardProps {
-    onManageGoalsPress: () => void;
+    weeklyGoal: number;
+    onManageGoalsPress: (weeklyGoal: number) => void;
 }
 
-const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
+const GoalsCard: React.FC<GoalsCardProps> = ({ weeklyGoal, onManageGoalsPress }) => {
     // Mock data - could be props in a real app
     const workoutsRemaining = 1;
-    const weeklyGoal = 2;
     const weeklyStreak = 1;
     const completedWorkouts = 1;
 
@@ -83,7 +83,7 @@ const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
                 style={styles.manageButton}
                 onPress={() => {
                     console.log('Manage Goals button pressed');
-                    onManageGoalsPress();
+                    onManageGoalsPress(weeklyGoal);
                 }}
             >
                 <Text style={styles.manageButtonText}>Manage Goals</Text>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     manageButtonText: {
-        color: 'white',
+        color: Colors.WHITE,
         fontSize: 15,
         fontWeight: '600',
     },
