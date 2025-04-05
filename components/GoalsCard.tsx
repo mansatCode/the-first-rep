@@ -17,7 +17,7 @@ interface GoalsCardProps {
 
 const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
     // Get values from context instead of props
-    const { weeklyGoal, workoutsCompleted } = useGoals();
+    const { weeklyGoal, workoutsCompleted, isLoading } = useGoals();
 
     // Debug log when weeklyGoal changes
     useEffect(() => {
@@ -43,67 +43,73 @@ const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
                 <Text style={styles.subtitle}>
                     {isGoalCompleted
                         ? "Amazing job! You crushed your weekly goal! 🎉"
-                        : "Hey champ, keep pushing!"}
+                        : "Hey champ, one final push!"}
                 </Text>
             </View>
 
-            <View style={styles.content}>
-                {/* Progress Circle */}
-                <View style={styles.progressContainer}>
-                    <AnimatedCircularProgress
-                        size={140}
-                        width={15}
-                        fill={progressPercentage}
-                        tintColor={isGoalCompleted ? Colors.GREEN : Colors.PURPLE}
-                        backgroundColor={Colors.WHITE}
-                        rotation={0}
-                        lineCap="round"
-                    >
-                        {() => (
-                            <View style={styles.progressTextContainer}>
-                                {isGoalCompleted ? (
-                                    <>
-                                        <MaterialCommunityIcons
-                                            name="trophy"
-                                            size={40}
-                                            color={Colors.ORANGE}
-                                        />
-                                        <Text style={styles.completedText}>Complete!</Text>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Text style={styles.progressNumber}>{workoutsRemaining}</Text>
-                                        <Text style={styles.progressLabel}>
-                                            workout{workoutsRemaining !== 1 ? 's' : ''}{'\n'}remaining
-                                        </Text>
-                                    </>
-                                )}
+            {isLoading ? (
+                <View style={styles.loadingContainer}>
+                    <Text style={styles.loadingText}>Loading goals...</Text>
+                </View>
+            ) : (
+                <View style={styles.content}>
+                    {/* Progress Circle */}
+                    <View style={styles.progressContainer}>
+                        <AnimatedCircularProgress
+                            size={140}
+                            width={15}
+                            fill={progressPercentage}
+                            tintColor={isGoalCompleted ? Colors.GREEN : Colors.PURPLE}
+                            backgroundColor={Colors.WHITE}
+                            rotation={0}
+                            lineCap="round"
+                        >
+                            {() => (
+                                <View style={styles.progressTextContainer}>
+                                    {isGoalCompleted ? (
+                                        <>
+                                            <MaterialCommunityIcons
+                                                name="trophy"
+                                                size={40}
+                                                color={Colors.ORANGE}
+                                            />
+                                            <Text style={styles.completedText}>Complete!</Text>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Text style={styles.progressNumber}>{workoutsRemaining}</Text>
+                                            <Text style={styles.progressLabel}>
+                                                workout{workoutsRemaining !== 1 ? 's' : ''}{'\n'}remaining
+                                            </Text>
+                                        </>
+                                    )}
+                                </View>
+                            )}
+                        </AnimatedCircularProgress>
+                    </View>
+
+                    {/* Info Cards */}
+                    <View style={styles.infoCardsContainer}>
+                        {/* Weekly Workout Goal Card */}
+                        <View style={[styles.infoCard, isGoalCompleted && styles.completedInfoCard]}>
+                            <Text style={styles.infoCardTitle}>Weekly Workout Goal</Text>
+                            <View style={styles.infoCardContent}>
+                                <Ionicons name="calendar-outline" size={18} color={Colors.GREEN} />
+                                <Text style={styles.infoCardValue}>{weeklyGoal}</Text>
                             </View>
-                        )}
-                    </AnimatedCircularProgress>
-                </View>
-
-                {/* Info Cards */}
-                <View style={styles.infoCardsContainer}>
-                    {/* Weekly Workout Goal Card */}
-                    <View style={[styles.infoCard, isGoalCompleted && styles.completedInfoCard]}>
-                        <Text style={styles.infoCardTitle}>Weekly Workout Goal</Text>
-                        <View style={styles.infoCardContent}>
-                            <Ionicons name="calendar-outline" size={18} color={Colors.GREEN} />
-                            <Text style={styles.infoCardValue}>{weeklyGoal}</Text>
                         </View>
-                    </View>
 
-                    {/* Weekly Streak Card */}
-                    <View style={[styles.infoCard, isGoalCompleted && styles.completedInfoCard]}>
-                        <Text style={styles.infoCardTitle}>Weekly Streak</Text>
-                        <View style={styles.infoCardContent}>
-                            <MaterialCommunityIcons name="fire" size={18} color={Colors.ORANGE} />
-                            <Text style={styles.infoCardValue}>{weeklyStreak}</Text>
+                        {/* Weekly Streak Card */}
+                        <View style={[styles.infoCard, isGoalCompleted && styles.completedInfoCard]}>
+                            <Text style={styles.infoCardTitle}>Weekly Streak</Text>
+                            <View style={styles.infoCardContent}>
+                                <MaterialCommunityIcons name="fire" size={18} color={Colors.ORANGE} />
+                                <Text style={styles.infoCardValue}>{weeklyStreak}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
+            )}
 
             {/* Manage Goals Button */}
             <TouchableOpacity
@@ -212,11 +218,20 @@ const styles = StyleSheet.create({
         marginHorizontal: 100,
         justifyContent: 'center',
     },
-
     manageButtonText: {
-        color: Colors.WHITE,
+        color: 'white',
         fontSize: 15,
         fontWeight: '600',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    loadingText: {
+        fontSize: 16,
+        color: Colors.WHITE,
+        fontStyle: 'italic',
     },
 });
 

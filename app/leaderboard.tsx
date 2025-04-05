@@ -100,7 +100,7 @@ const leaderboard = () => {
             </View>
 
             {/* Bottom Illustration */}
-            <FlowersSvg width={400} height={250} marginTop={10} />
+            <FlowersSvg width={400} height={250} />
         </SafeAreaView>
     );
 };

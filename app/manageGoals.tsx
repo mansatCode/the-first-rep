@@ -14,7 +14,9 @@ import { useGoals } from '../contexts/GoalsContext';
 
 const manageGoals = () => {
     const navigation = useNavigation();
-    const { weeklyGoal, setWeeklyGoal } = useGoals();
+    const { weeklyGoal, setWeeklyGoal, isLoading } = useGoals();
+
+    console.log("ManageGoals screen: Current weeklyGoal from context:", weeklyGoal);
 
     // State for modal visibility and local workouts value
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,6 +24,7 @@ const manageGoals = () => {
 
     // Initialize local state from context
     useEffect(() => {
+        console.log("ManageGoals: Context weeklyGoal changed to", weeklyGoal);
         setLocalWorkoutsPerWeek(weeklyGoal);
     }, [weeklyGoal]);
 
@@ -30,14 +33,17 @@ const manageGoals = () => {
     };
 
     const handleWorkoutSelection = (number: number) => {
+        console.log("Selected new workout count:", number);
         setLocalWorkoutsPerWeek(number);
         setModalVisible(false);
     };
 
     const handleSave = () => {
-        console.log("Save clicked, updating weekly goal to:", localWorkoutsPerWeek);
+        console.log("Save clicked, updating weekly goal from", weeklyGoal, "to", localWorkoutsPerWeek);
+
         // Update the context value
         setWeeklyGoal(localWorkoutsPerWeek);
+
         // Navigate back
         navigation.goBack();
     };
@@ -143,6 +149,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         color: Colors.GREEN,
+    },
+    debugContainer: {
+        padding: 12,
+        marginBottom: 8,
+        backgroundColor: Colors.DARK_BLUE,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: Colors.LIGHT_BLUE,
+    },
+    debugText: {
+        fontSize: 14,
+        color: Colors.WHITE,
+        textAlign: 'center',
     },
     modalOverlay: {
         flex: 1,
