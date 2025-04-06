@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Switch, TextInput, Alert } fr
 import React, { useState, useRef, useEffect } from 'react';
 import Colors from '@/utilities/color';
 import * as Notifications from 'expo-notifications';
+import TimePickerDialog from './TimePickerDialog';
 
 interface ReminderItemProps {
     id: string;
@@ -41,10 +42,12 @@ export default function ReminderItem({
     const [isEnabled, setIsEnabled] = useState(initialIsEnabled);
     const [selectedDays, setSelectedDays] = useState<string[]>(initialSelectedDays);
     const [title, setTitle] = useState(initialTitle);
+    const [reminderTime, setReminderTime] = useState(time);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [isExpanded, setIsExpanded] = useState(true);
     const [savedNotificationIds, setSavedNotificationIds] = useState<string[]>(notificationIds);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [timePickerVisible, setTimePickerVisible] = useState(false);
     const titleInputRef = useRef<TextInput>(null);
 
     // Map day abbreviations to full names and weekday numbers (1-7 where 1 is Sunday)
@@ -70,7 +73,10 @@ export default function ReminderItem({
         if (notificationIds && JSON.stringify(notificationIds) !== JSON.stringify(savedNotificationIds)) {
             setSavedNotificationIds(notificationIds);
         }
-    }, [initialTitle, initialSelectedDays, initialIsEnabled, notificationIds]);
+        if (time && (time.hour !== reminderTime.hour || time.minute !== reminderTime.minute)) {
+            setReminderTime(time);
+        }
+    }, [initialTitle, initialSelectedDays, initialIsEnabled, notificationIds, time]);
 
     // Request notification permissions
     useEffect(() => {
@@ -122,7 +128,7 @@ export default function ReminderItem({
                 // Persist to storage with enabled state
                 await onUpdate(id, {
                     title,
-                    time,
+                    time: reminderTime,
                     selectedDays,
                     isEnabled: true,
                     notificationIds: newNotificationIds
@@ -135,7 +141,7 @@ export default function ReminderItem({
                 setSavedNotificationIds([]);
                 await onUpdate(id, {
                     title,
-                    time,
+                    time: reminderTime,
                     selectedDays,
                     isEnabled: false,
                     notificationIds: []
@@ -333,33 +339,96 @@ export default function ReminderItem({
         }
     };
 
-    // Schedule a notification for a specific weekday
-    const scheduleNotificationForDay = async (weekday: number) => {
+    const handleTimePress = () => {
+        setTimePickerVisible(true);
+    };
+
+    const handleTimeUpdate = async (hour: number, minute: number) => {
+        console.log(`Time updated for reminder ${id} to ${hour}:${minute}`);
+
+        // Update local state
+        setReminderTime({ hour, minute });
+
         try {
+            setIsUpdating(true);
+
+            // Cancel all previous notifications
+            await cancelPreviousNotifications();
+
+            // Only reschedule if the reminder is enabled and has days selected
+            if (isEnabled && selectedDays.length > 0) {
+                // Schedule new notifications with updated time
+                const newNotificationIds: string[] = [];
+
+                for (const day of selectedDays) {
+                    const weekday = dayMap[day].weekday;
+                    const notificationId = await scheduleNotificationForDay(weekday, hour, minute);
+                    if (notificationId) {
+                        newNotificationIds.push(notificationId);
+                    }
+                }
+
+                // Update saved notification IDs
+                setSavedNotificationIds(newNotificationIds);
+
+                // Persist changes to storage
+                await onUpdate(id, {
+                    time: { hour, minute },
+                    notificationIds: newNotificationIds
+                });
+
+                console.log(`Updated ${newNotificationIds.length} notifications with new time`);
+            } else {
+                // Just persist the time change without scheduling
+                await onUpdate(id, {
+                    time: { hour, minute }
+                });
+            }
+        } catch (error) {
+            console.error('Error updating time:', error);
+            // Revert local state on error
+            setReminderTime(time);
+            Alert.alert(
+                'Error',
+                'Failed to update reminder time. Please try again.',
+                [{ text: 'OK' }]
+            );
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    // Schedule a notification for a specific weekday
+    const scheduleNotificationForDay = async (weekday: number, hourOverride?: number, minuteOverride?: number) => {
+        try {
+            // Use either the provided hour/minute or the current reminderTime
+            const hour = hourOverride !== undefined ? hourOverride : reminderTime.hour;
+            const minute = minuteOverride !== undefined ? minuteOverride : reminderTime.minute;
+
             // Get the day name for display
             const dayName = Object.keys(dayMap).find(
                 key => dayMap[key].weekday === weekday
             ) || 'M';
 
             // Log for debugging
-            console.log(`Scheduling notification for ${dayMap[dayName].name} at ${formatTime(time.hour, time.minute)} with weekly trigger`);
+            console.log(`Scheduling notification for ${dayMap[dayName].name} at ${formatTime(hour, minute)} with weekly trigger`);
 
             // Schedule the notification with a WEEKLY trigger
             const notificationId = await Notifications.scheduleNotificationAsync({
                 content: {
                     title: title,
-                    body: `It's ${formatTime(time.hour, time.minute)}`,
+                    body: `It's ${formatTime(hour, minute)}`,
                     sound: true,
                 },
                 trigger: {
                     type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
                     weekday: weekday,
-                    hour: time.hour,
-                    minute: time.minute,
+                    hour: hour,
+                    minute: minute,
                 }
             });
 
-            console.log(`Scheduled notification for ${dayMap[dayName].name} at ${formatTime(time.hour, time.minute)}, ID: ${notificationId}`);
+            console.log(`Scheduled notification for ${dayMap[dayName].name} at ${formatTime(hour, minute)}, ID: ${notificationId}`);
 
             return notificationId;
         } catch (error) {
@@ -431,12 +500,17 @@ export default function ReminderItem({
 
                 <View style={styles.headerContent}>
                     <View style={styles.timeContainer}>
-                        <Text style={[
-                            styles.time,
-                            !isEnabled && styles.timeDisabled
-                        ]}>
-                            {formatTime(time.hour, time.minute)}
-                        </Text>
+                        <TouchableOpacity
+                            onPress={handleTimePress}
+                            disabled={isUpdating}
+                        >
+                            <Text style={[
+                                styles.time,
+                                !isEnabled && styles.timeDisabled
+                            ]}>
+                                {formatTime(reminderTime.hour, reminderTime.minute)}
+                            </Text>
+                        </TouchableOpacity>
                         <Text style={[
                             styles.day,
                             selectedDays.length === 0 && styles.noDaysText
@@ -489,6 +563,14 @@ export default function ReminderItem({
                     </View>
                 </>
             )}
+
+            <TimePickerDialog
+                visible={timePickerVisible}
+                onClose={() => setTimePickerVisible(false)}
+                onConfirm={handleTimeUpdate}
+                initialHour={reminderTime.hour}
+                initialMinute={reminderTime.minute}
+            />
         </View>
     );
 }
