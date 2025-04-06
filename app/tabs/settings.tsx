@@ -11,10 +11,17 @@ import {
 import SettingSvg from '../../assets/images/settings.svg';
 import SettingItem from '../../components/SettingItem';
 import { settingIcons } from '@/constants/icon';
+import { useNavigation } from 'expo-router';
 
 export default function Page() {
+  const navigation = useNavigation();
+
   const handleSettingPress = (setting: string) => {
     console.log(`${setting} pressed`);
+  };
+
+  const handleRemindersPress = () => {
+    navigation.navigate('setReminders');
   };
 
   const handleLogout = () => {
@@ -28,7 +35,7 @@ export default function Page() {
           <SettingItem
             icon={settingIcons.bell()}
             title="Reminders"
-            onPress={() => handleSettingPress('Reminders')}
+            onPress={() => handleRemindersPress()}
           />
           <SettingItem
             icon={settingIcons.language()}
@@ -47,7 +54,7 @@ export default function Page() {
           />
         </View>
 
-        <SettingSvg width={400} height={250} marginTop={40} />
+        <SettingSvg width={400} height={250} />
 
         <TouchableOpacity
           style={styles.logoutButton}
@@ -64,20 +71,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.DEEP_BLUE,
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: Colors.WHITE,
-    marginTop: 20,
-    marginBottom: 20,
   },
   settingsContainer: {
-    marginTop: 5,
   },
   logoutButton: {
     backgroundColor: Colors.DARK_BLUE,

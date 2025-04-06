@@ -43,7 +43,7 @@ const GoalsCard: React.FC<GoalsCardProps> = ({ onManageGoalsPress }) => {
                 <Text style={styles.subtitle}>
                     {isGoalCompleted
                         ? "Amazing job! You crushed your weekly goal! 🎉"
-                        : "Hey champ, one final push!"}
+                        : "Hey champ, keep pushing!"}
                 </Text>
             </View>
 
