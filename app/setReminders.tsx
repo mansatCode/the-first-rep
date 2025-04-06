@@ -56,7 +56,6 @@ export default function setReminders() {
             if (savedReminders !== null) {
                 const parsedReminders = JSON.parse(savedReminders) as Reminder[];
                 setReminders(parsedReminders);
-                console.log(`Loaded ${parsedReminders.length} reminders from storage`);
             } else {
                 console.log('No saved reminders found');
             }
@@ -76,7 +75,6 @@ export default function setReminders() {
     const saveReminders = async (updatedReminders: Reminder[] = reminders) => {
         try {
             await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedReminders));
-            console.log(`Saved ${updatedReminders.length} reminders to storage`);
             return true;
         } catch (error) {
             console.error('Failed to save reminders:', error);
@@ -188,6 +186,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.DEEP_BLUE,
+        paddingHorizontal: 16,
+        paddingTop: 8,
     },
     remindersList: {
         flex: 1,

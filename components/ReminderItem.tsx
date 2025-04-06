@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Colors from '@/utilities/color';
 import * as Notifications from 'expo-notifications';
 import TimePickerDialog from './TimePickerDialog';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface ReminderItemProps {
     id: string;
@@ -44,7 +45,7 @@ export default function ReminderItem({
     const [title, setTitle] = useState(initialTitle);
     const [reminderTime, setReminderTime] = useState(time);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false); // Start unexpanded by default
     const [savedNotificationIds, setSavedNotificationIds] = useState<string[]>(notificationIds);
     const [isUpdating, setIsUpdating] = useState(false);
     const [timePickerVisible, setTimePickerVisible] = useState(false);
@@ -340,6 +341,10 @@ export default function ReminderItem({
     };
 
     const handleTimePress = () => {
+        // If collapsed, expand first
+        if (!isExpanded) {
+            setIsExpanded(true);
+        }
         setTimePickerVisible(true);
     };
 
@@ -413,11 +418,10 @@ export default function ReminderItem({
             // Log for debugging
             console.log(`Scheduling notification for ${dayMap[dayName].name} at ${formatTime(hour, minute)} with weekly trigger`);
 
-            // Schedule the notification with a WEEKLY trigger
             const notificationId = await Notifications.scheduleNotificationAsync({
                 content: {
-                    title: title,
-                    body: `It's ${formatTime(hour, minute)}`,
+                    title: "Workout Reminder", // Fixed title
+                    body: title, // Using the reminder title as the body
                     sound: true,
                 },
                 trigger: {
@@ -495,7 +499,11 @@ export default function ReminderItem({
                             </TouchableOpacity>
                         )}
                     </View>
-                    <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>
+                    {isExpanded ? (
+                        <Ionicons name="chevron-up" size={22} color={Colors.WHITE} />
+                    ) : (
+                        <Ionicons name="chevron-down" size={20} color={Colors.WHITE} />
+                    )}
                 </View>
 
                 <View style={styles.headerContent}>
@@ -520,7 +528,7 @@ export default function ReminderItem({
                     <Switch
                         trackColor={{ false: '#767577', true: Colors.PURPLE }}
                         thumbColor={Colors.WHITE}
-                        ios_backgroundColor="#3e3e3e"
+                        ios_backgroundColor="#767577"
                         onValueChange={toggleSwitch}
                         value={isEnabled}
                         disabled={isUpdating}
@@ -557,7 +565,7 @@ export default function ReminderItem({
                             onPress={handleDelete}
                             disabled={isUpdating}
                         >
-                            <Text style={styles.deleteIcon}>🗑️</Text>
+                            <Ionicons name="trash" size={24} color={Colors.RED} />
                             <Text style={styles.deleteText}>Delete</Text>
                         </TouchableOpacity>
                     </View>
@@ -577,11 +585,10 @@ export default function ReminderItem({
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#1a2733',
+        backgroundColor: Colors.DARK_BLUE,
         borderRadius: 12,
         padding: 16,
-        marginHorizontal: 16,
-        marginVertical: 10,
+        marginBottom: 8,
     },
     collapsedContainer: {
         paddingVertical: 12,
@@ -607,11 +614,6 @@ const styles = StyleSheet.create({
     timeContainer: {
         flex: 1,
     },
-    chevron: {
-        color: Colors.WHITE,
-        fontSize: 12,
-        marginLeft: 8,
-    },
     label: {
         color: Colors.WHITE,
         opacity: 0.7,
@@ -636,11 +638,12 @@ const styles = StyleSheet.create({
         opacity: 0.7,
     },
     day: {
+        marginTop: 2,
         color: Colors.WHITE,
         fontSize: 14,
     },
     noDaysText: {
-        color: '#ff9500', // Orange to indicate attention needed
+        color: Colors.ORANGE, // Orange to indicate attention needed
         fontStyle: 'italic',
     },
     daysContainer: {
@@ -655,41 +658,36 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: Colors.WHITE,
+        borderColor: 'rgba(224, 225, 221, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 3,
+        marginRight: 18,
     },
     selectedDayButton: {
-        backgroundColor: Colors.WHITE,
+        borderWidth: 1,
+        borderColor: Colors.WHITE,
     },
     dayButtonText: {
-        color: Colors.WHITE,
+        color: 'rgba(224, 225, 221, 0.5)',
         fontSize: 12,
     },
     selectedDayButtonText: {
-        color: Colors.DEEP_BLUE,
+        color: Colors.WHITE,
     },
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
     },
     deleteButton: {
-        backgroundColor: '#ff3b30',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 4,
+        paddingVertical: 4,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-start',
         flexDirection: 'row',
     },
     deleteText: {
+        marginLeft: 6,
         color: Colors.WHITE,
         fontSize: 14,
     },
-    deleteIcon: {
-        fontSize: 14,
-        marginRight: 6,
-    }
 });

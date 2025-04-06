@@ -38,13 +38,10 @@ export const GoalsProvider: React.FC<GoalsProviderProps> = ({ children }) => {
     useEffect(() => {
         const loadSavedValues = async () => {
             try {
-                console.log('Loading saved values from AsyncStorage...');
-
                 // Load weekly goal
                 const savedWeeklyGoal = await AsyncStorage.getItem(WEEKLY_GOAL_KEY);
                 if (savedWeeklyGoal !== null) {
                     const parsedValue = parseInt(savedWeeklyGoal, 10);
-                    console.log('Loaded weekly goal:', parsedValue);
                     setWeeklyGoalState(parsedValue);
                 }
 
@@ -52,7 +49,6 @@ export const GoalsProvider: React.FC<GoalsProviderProps> = ({ children }) => {
                 const savedWorkoutsCompleted = await AsyncStorage.getItem(WORKOUTS_COMPLETED_KEY);
                 if (savedWorkoutsCompleted !== null) {
                     const parsedValue = parseInt(savedWorkoutsCompleted, 10);
-                    console.log('Loaded workouts completed:', parsedValue);
                     setWorkoutsCompletedState(parsedValue);
                 }
             } catch (error) {
@@ -67,30 +63,24 @@ export const GoalsProvider: React.FC<GoalsProviderProps> = ({ children }) => {
 
     // Custom setters that update both state and AsyncStorage
     const setWeeklyGoal = async (goal: number) => {
-        console.log('Setting weekly goal to:', goal);
-
         // Update state
         setWeeklyGoalState(goal);
 
         // Persist to AsyncStorage
         try {
             await AsyncStorage.setItem(WEEKLY_GOAL_KEY, goal.toString());
-            console.log('Saved weekly goal to AsyncStorage');
         } catch (error) {
             console.error('Error saving weekly goal:', error);
         }
     };
 
     const setWorkoutsCompleted = async (completed: number) => {
-        console.log('Setting workouts completed to:', completed);
-
         // Update state
         setWorkoutsCompletedState(completed);
 
         // Persist to AsyncStorage
         try {
             await AsyncStorage.setItem(WORKOUTS_COMPLETED_KEY, completed.toString());
-            console.log('Saved workouts completed to AsyncStorage');
         } catch (error) {
             console.error('Error saving workouts completed:', error);
         }
