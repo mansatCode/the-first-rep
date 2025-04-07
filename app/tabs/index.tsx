@@ -19,7 +19,7 @@ export default function Page() {
   const [showManageGoals, setShowManageGoals] = useState(false);
 
   const handleLessonPress = () => {
-    navigation.navigate('lessons');
+    navigation.navigate('allLessons');
   };
 
   const handleManageGoalsPress = () => {
