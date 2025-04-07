@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import LessonCard, { Lesson } from '../../components/LessonCard';
+import LessonCard from '../../components/LessonCard';
 import DumbbellSvg from '../../assets/images/dumbbell.svg';
 import GoalsCard from '../../components/GoalsCard';
 import { useNavigation } from '@react-navigation/native';
@@ -18,38 +18,10 @@ export default function Page() {
   const navigation = useNavigation();
   const [showManageGoals, setShowManageGoals] = useState(false);
 
-  // Sample lessons data with read status
-  const [lessons, setLessons] = useState<Lesson[]>([
-    {
-      id: '1',
-      title: 'The benefits of strength training',
-      isRead: false,
-      icon: <MaterialCommunityIcons name="lightning-bolt" size={20} color={Colors.WHITE} />,
-    },
-    {
-      id: '2',
-      title: 'What is progressive overload?',
-      isRead: false,
-      icon: <MaterialCommunityIcons name="sigma" size={20} color={Colors.WHITE} />,
-    },
-    {
-      id: '3',
-      title: 'How often should I strength train?',
-      isRead: false,
-      icon: <Ionicons name="time-outline" size={20} color={Colors.WHITE} />,
-    },
-  ]);
-
-  // Handle lesson press - toggle read status
-  const handleLessonPress = (id: string) => {
-    setLessons(
-      lessons.map((lesson) =>
-        lesson.id === id ? { ...lesson, isRead: !lesson.isRead } : lesson
-      )
-    );
+  const handleLessonPress = () => {
+    navigation.navigate('lessons');
   };
 
-  // Handle manage goals press
   const handleManageGoalsPress = () => {
     setShowManageGoals(true);
     navigation.navigate('manageGoals');
@@ -72,14 +44,11 @@ export default function Page() {
         {/* Lessons Section */}
         <View style={styles.lessonsSection}>
           <Text style={styles.sectionTitle}>Lessons</Text>
-
-          {lessons.map((lesson) => (
-            <LessonCard
-              key={lesson.id}
-              lesson={lesson}
-              onPress={() => handleLessonPress(lesson.id)}
-            />
-          ))}
+          <LessonCard
+            title='View all'
+            icon={<Ionicons name="book" size={20} color={Colors.WHITE} />}
+            onPress={() => handleLessonPress()}
+          />
         </View>
 
         {/* Goals Section */}

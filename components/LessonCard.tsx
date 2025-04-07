@@ -8,40 +8,24 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/utilities/color';
 
-// Define the Lesson interface
-export interface Lesson {
-    id: string;
-    title: string;
-    isRead: boolean;
-    icon: React.ReactNode;
-}
-
 // LessonCard Props interface
 export interface LessonCardProps {
-    lesson: Lesson;
+    title: string;
+    icon: React.ReactNode;
     onPress: () => void;
 }
 
 // Lesson Card Component
-const LessonCard: React.FC<LessonCardProps> = ({ lesson, onPress }) => {
+const LessonCard: React.FC<LessonCardProps> = ({ title, icon, onPress }) => {
     return (
         <TouchableOpacity
-            style={[
-                styles.lessonCard,
-                lesson.isRead ? styles.lessonCardRead : null,
-            ]}
+            style={styles.lessonCard}
             onPress={onPress}
         >
             <View style={styles.lessonContent}>
-                {lesson.icon}
-                <Text style={styles.lessonTitle}>{lesson.title}</Text>
-
-                {/* Right icon - check if read, chevron if not */}
-                {lesson.isRead ? (
-                    <Ionicons name="checkmark" size={22} color={Colors.WHITE} />
-                ) : (
-                    <Ionicons name="chevron-forward" size={20} color={Colors.WHITE} />
-                )}
+                {icon}
+                <Text style={styles.lessonTitle}>{title}</Text>
+                <Ionicons name="chevron-forward" size={20} color={Colors.WHITE} />
             </View>
         </TouchableOpacity>
     );
@@ -55,9 +39,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 12,
         marginBottom: 8,
-    },
-    lessonCardRead: {
-        backgroundColor: Colors.CHECKED_GREEN,
     },
     lessonContent: {
         padding: 16,
