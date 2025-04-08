@@ -12,6 +12,8 @@ export interface LessonData {
     SvgImage: React.FC<SvgProps>;
     // Array of source strings
     sources: string[];
+    // Description to display above sources
+    sourceDescription: string;
     // Icon information for the lesson card
     icon: {
         name: string; // Ionicons name
@@ -33,6 +35,7 @@ export const LESSONS: LessonData[] = [
             "American College of Sports Medicine Guidelines, 2023",
             "National Strength and Conditioning Association"
         ],
+        sourceDescription: "This information is based on the following academic sources:",
         icon: {
             name: "flash",
             size: 24,
@@ -49,6 +52,7 @@ export const LESSONS: LessonData[] = [
             "International Journal of Exercise Science, 2021",
             "Principles of Strength Training, 4th Edition"
         ],
+        sourceDescription: "This content references the following scientific literature:",
         icon: {
             name: "calculator-outline",
             size: 24,
@@ -65,6 +69,7 @@ export const LESSONS: LessonData[] = [
             "American Council on Exercise, Training Guidelines 2023",
             "Medicine & Science in Sports & Exercise, 2021"
         ],
+        sourceDescription: "The recommendations are supported by these research publications:",
         icon: {
             name: "time-outline",
             size: 24,

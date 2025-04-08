@@ -103,6 +103,9 @@ const LessonDetail = () => {
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Sources</Text>
 
+                        {/* Source description */}
+                        <Text style={styles.sourceDescription}>{lesson.sourceDescription}</Text>
+
                         {lesson.sources.map((source, index) => (
                             <TouchableOpacity
                                 key={`source-${index}`}
@@ -217,7 +220,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: Colors.WHITE,
-        marginBottom: 20,
+        marginBottom: 12,
+    },
+    sourceDescription: {
+        fontSize: 14,
+        color: Colors.WHITE,
+        marginBottom: 16,
     },
     sourceItemContainer: {
         marginBottom: 12,
