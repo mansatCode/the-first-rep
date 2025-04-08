@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Modal, Dimensions, ScrollView } from 'react-native';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Modal, ScrollView } from 'react-native';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Swiper from 'react-native-swiper';
+import * as Clipboard from 'expo-clipboard';
 import Colors from '@/utilities/color';
 import { LESSONS } from '@/constants/lessonData';
 import SettingItem from '@/components/SettingItem';
 import { settingIcons } from '@/constants/icon';
-
-const { width } = Dimensions.get('window');
 
 // Function to split text into multiple pages based on \p delimiter
 const splitTextIntoPages = (text: string) => {
@@ -21,8 +20,8 @@ const splitTextIntoPages = (text: string) => {
 
 const LessonDetail = () => {
     const { id } = useLocalSearchParams();
-    const router = useRouter();
     const [modalVisible, setModalVisible] = useState(false);
+    const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
     // Find the lesson data based on the id
     const lesson = LESSONS.find(lesson => lesson.id === id);
@@ -37,6 +36,17 @@ const LessonDetail = () => {
 
     // Split the description into pages
     const textPages = splitTextIntoPages(lesson.description);
+
+    // Function to copy text to clipboard
+    const copyToClipboard = async (text: string, index: number) => {
+        await Clipboard.setStringAsync(text);
+        setCopiedIndex(index);
+
+        // Reset copied status after 2 seconds
+        setTimeout(() => {
+            setCopiedIndex(null);
+        }, 2000);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,9 +104,21 @@ const LessonDetail = () => {
                         <Text style={styles.modalTitle}>Sources</Text>
 
                         {lesson.sources.map((source, index) => (
-                            <Text key={`source-${index}`} style={styles.sourceItem}>
-                                {source}
-                            </Text>
+                            <TouchableOpacity
+                                key={`source-${index}`}
+                                style={styles.sourceItemContainer}
+                                onPress={() => copyToClipboard(source, index)}
+                                activeOpacity={0.7}
+                            >
+                                <Text style={styles.sourceItem}>
+                                    {source}
+                                </Text>
+                                {copiedIndex === index && (
+                                    <View style={styles.copiedIndicator}>
+                                        <Ionicons name="copy-outline" size={16} color={Colors.WHITE} />
+                                    </View>
+                                )}
+                            </TouchableOpacity>
                         ))}
 
                         <TouchableOpacity
@@ -188,7 +210,7 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: Colors.DARK_BLUE,
         borderRadius: 12,
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
         paddingVertical: 20,
     },
     modalTitle: {
@@ -197,10 +219,32 @@ const styles = StyleSheet.create({
         color: Colors.WHITE,
         marginBottom: 20,
     },
+    sourceItemContainer: {
+        marginBottom: 12,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        backgroundColor: Colors.DEEP_BLUE,
+    },
     sourceItem: {
         fontSize: 15,
         color: Colors.WHITE,
-        marginBottom: 16,
+    },
+    copiedIndicator: {
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        backgroundColor: Colors.DEEP_BLUE,
+        borderRadius: 12,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    copiedText: {
+        color: Colors.WHITE,
+        fontSize: 12,
+        marginLeft: 4,
     },
     closeButton: {
         alignSelf: 'flex-end',
