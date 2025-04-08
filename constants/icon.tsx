@@ -9,7 +9,7 @@ export const icon = {
     index: (props: any) => <Ionicons name='home-outline' size={24} {...props} />,
     track: (props: any) => <MaterialCommunityIcons name='dumbbell' size={24} {...props} />,
     global: (props: any) => <Ionicons name='earth' size={24} {...props} />,
-    settings: (props: any) => <Ionicons name='person-circle-outline' size={24} {...props} />
+    settings: (props: any) => <Ionicons name='person-circle-outline' size={24} {...props} />,
 };
 
 export const settingIcons = {
@@ -17,4 +17,5 @@ export const settingIcons = {
     language: () => <Ionicons name='language' size={24} color={Colors.WHITE} />,
     ruler: () => <Entypo name='ruler' size={24} color={Colors.WHITE} />,
     location: () => <EvilIcons name='location' size={24} color={Colors.WHITE} />,
+    info: () => <Ionicons name="information-circle-outline" size={20} color={Colors.WHITE} />
 };

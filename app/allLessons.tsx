@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import {
     SafeAreaView,
     StyleSheet,
@@ -8,11 +8,14 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/utilities/color';
 import LessonCard from '@/components/LessonCard';
+import { LESSONS } from '@/constants/lessonData';
 
 const allLessons = () => {
+    const router = useRouter();
+
     // Handler function for when a lesson card is pressed
-    const handleLessonPress = (title: string) => {
-        console.log(title);
+    const handleLessonPress = (id: string) => {
+        router.push(`/lesson/${id}`);
     };
 
     return (
@@ -28,23 +31,18 @@ const allLessons = () => {
             />
 
             <ScrollView style={styles.scrollContainer}>
-                <LessonCard
-                    title="The benefits of strength training"
-                    icon={<Ionicons name="flash" size={24} color={Colors.WHITE} />}
-                    onPress={() => handleLessonPress("The benefits of strength training")}
-                />
-
-                <LessonCard
-                    title="What is progressive overload?"
-                    icon={<Ionicons name="calculator-outline" size={24} color={Colors.WHITE} />}
-                    onPress={() => handleLessonPress("What is progressive overload?")}
-                />
-
-                <LessonCard
-                    title="How often should I strength train?"
-                    icon={<Ionicons name="time-outline" size={24} color={Colors.WHITE} />}
-                    onPress={() => handleLessonPress("How often should I strength train?")}
-                />
+                {LESSONS.map((lesson) => (
+                    <LessonCard
+                        key={lesson.id}
+                        title={lesson.title}
+                        icon={<Ionicons
+                            name={lesson.icon.name as any}
+                            size={lesson.icon.size}
+                            color={lesson.icon.color}
+                        />}
+                        onPress={() => handleLessonPress(lesson.id)}
+                    />
+                ))}
             </ScrollView>
         </SafeAreaView>
     );
