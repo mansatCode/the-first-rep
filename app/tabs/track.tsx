@@ -8,8 +8,8 @@ import {
   View
 } from 'react-native';
 import YogaSvg from '../../assets/images/yoga.svg';
+import BalloonsSvg from '../../assets/images/balloons.svg';
 
-// Import the WorkoutItem component
 import WorkoutItem from '@/components/WorkoutItem';
 import useHealthData from '@/hooks/useHealthData';
 
@@ -43,13 +43,18 @@ export default function Page() {
     <SafeAreaView style={styles.container}>
       {exerciseSessions ? (
         <ScrollView style={styles.content}>
+          <View style={{ alignItems: 'center', marginBottom: 16 }}>
+            <BalloonsSvg width={350} height={250} />
+          </View>
+          <Text style={{ color: Colors.WHITE, fontSize: 16, textAlign: 'center', marginBottom: 16, padding: 4 }}>
+            Congratulations on X workouts this week!
+          </Text>
           {exerciseSessions.map(session => (
             <WorkoutItem
               key={session.id}
               title={session.title || "Workout"}
               date={formatDate(session.startTimestamp)}
               duration={formatDuration(session.duration)}
-              onPress={() => console.log(`Pressed: ${session.title}`)}
             />
           ))}
         </ScrollView>
