@@ -5,7 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/utilities/color';
 
 // Workout Item Props Interface
@@ -13,8 +13,6 @@ export interface WorkoutItemProps {
     title: string;
     date: string;
     duration: string;
-    weight: string;
-    prs?: number;
     onPress?: () => void;
 }
 
@@ -23,41 +21,24 @@ const WorkoutItem: React.FC<WorkoutItemProps> = ({
     title,
     date,
     duration,
-    weight,
-    prs,
     onPress,
 }) => {
     return (
         <TouchableOpacity style={styles.workoutCard} onPress={onPress}>
             <View style={styles.workoutContent}>
-                <View>
+                <View style={styles.row}>
                     <Text style={styles.workoutTitle}>{title}</Text>
+                    <Ionicons name="chevron-forward" size={20} color={Colors.WHITE} />
+                </View>
+                <View style={styles.row}>
                     <Text style={styles.workoutDate}>{date}</Text>
-
-                    <View style={styles.workoutStats}>
-                        {/* Duration */}
-                        <View style={styles.statItem}>
-                            <Ionicons name="time-outline" size={14} color={Colors.WHITE} />
-                            <Text style={styles.statText}>{duration}</Text>
-                        </View>
-
-                        {/* Weight */}
-                        <View style={styles.statItem}>
-                            <MaterialCommunityIcons name="weight" size={14} color={Colors.WHITE} />
-                            <Text style={styles.statText}>{weight}</Text>
-                        </View>
-
-                        {/* PRs if available */}
-                        {prs !== undefined && (
-                            <View style={styles.statItem}>
-                                <Ionicons name="trophy-outline" size={14} color={Colors.WHITE} />
-                                <Text style={styles.statText}>{prs} PRs</Text>
-                            </View>
-                        )}
+                    <View style={styles.statItem}>
+                        <Ionicons name="time-outline" size={18} color={Colors.WHITE} />
+                        <Text style={styles.statText}>{duration}</Text>
                     </View>
                 </View>
 
-                <Ionicons name="chevron-forward" size={20} color={Colors.WHITE} />
+
             </View>
         </TouchableOpacity>
     );
@@ -72,9 +53,15 @@ const styles = StyleSheet.create({
     },
     workoutContent: {
         padding: 16,
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+    },
+    row: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     workoutTitle: {
         fontSize: 24,
@@ -94,7 +81,7 @@ const styles = StyleSheet.create({
     statItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 16,
+        marginRight: 10,
     },
     statText: {
         fontSize: 16,
