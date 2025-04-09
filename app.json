@@ -16,7 +16,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.anonymous.thefirstrep",
+      "permissions": [
+        "android.permission.health.READ_EXERCISE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -24,13 +28,14 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "./androidManifestPlugin.js",
       "expo-health-connect",
       [
         "expo-build-properties",
         {
           "android": {
-            "compileSdkVersion": 34,
-            "targetSdkVersion": 34,
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
             "minSdkVersion": 26
           }
         }

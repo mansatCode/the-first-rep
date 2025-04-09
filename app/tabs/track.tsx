@@ -1,5 +1,5 @@
 import Colors from '@/utilities/color';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,8 +8,13 @@ import {
 
 // Import the WorkoutItem component
 import WorkoutItem, { WorkoutItemProps } from '@/components/WorkoutItem';
+import useHealthData from '@/hooks/useHealthData';
 
 export default function Page() {
+  const [date, setDate] = useState(new Date('2025-08-04'));
+  const { exerciseSessions } = useHealthData(date);
+  console.log(`Exercise Sessions: ${exerciseSessions}`);
+
   // Sample workout data
   const workouts = [
     {
