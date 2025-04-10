@@ -18,6 +18,7 @@
       },
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.anonymous.thefirstrep",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.health.READ_EXERCISE"
       ]
@@ -36,11 +37,14 @@
           "android": {
             "compileSdkVersion": 35,
             "targetSdkVersion": 35,
-            "minSdkVersion": 26
+            "minSdkVersion": 26,
+            "useFrameworks": "static"
           }
         }
       ],
       "expo-router",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       [
         "expo-splash-screen",
         {

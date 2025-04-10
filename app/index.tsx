@@ -7,14 +7,17 @@ import {
     StyleSheet,
     SafeAreaView,
     StatusBar,
+    ActivityIndicator,
 } from 'react-native';
 import LogoSvg from '../assets/images/logo.svg';
 import Colors from '@/utilities/color';
 import { router } from 'expo-router';
+import auth from '@react-native-firebase/auth';
 
 const index = () => {
-    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSignIn = (): void => {
         console.log('Sign in button pressed');
@@ -45,10 +48,10 @@ const index = () => {
                 <View style={styles.formContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Username"
+                        placeholder="Email"
                         placeholderTextColor={Colors.DEEP_BLUE}
-                        value={username}
-                        onChangeText={setUsername}
+                        value={email}
+                        onChangeText={setEmail}
                         textAlign={'center'}
                     />
 
@@ -61,23 +64,30 @@ const index = () => {
                         onChangeText={setPassword}
                         textAlign={'center'}
                     />
+                    {loading ? (
+                        <ActivityIndicator size={'large'} style={{ margin: 28 }} />
+                    ) : (
+                        <>
+                            <TouchableOpacity onPress={handleForgotPassword}>
+                                <Text style={styles.forgotPasswordText}>I forgot my password</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity onPress={handleForgotPassword}>
-                        <Text style={styles.forgotPasswordText}>I forgot my password</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+                                <Text style={styles.signInButtonText}>Sign in</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-                        <Text style={styles.signInButtonText}>Sign in</Text>
-                    </TouchableOpacity>
+                            <View style={styles.signUpSection}>
+                                <Text style={styles.noAccountText}>Don't have an account?</Text>
+                                <TouchableOpacity onPress={handleSignUp}>
+                                    <Text style={styles.signUpText}>Sign Up Here</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+                    )}
 
-                    <View style={styles.signUpSection}>
-                        <Text style={styles.noAccountText}>Don't have an account?</Text>
-                        <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signUpText}>Sign Up Here</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
 
+                {/* Comment out this view when releasing */}
                 <View style={styles.footer}>
                     <TouchableOpacity onPress={handleContinueWithoutSignIn}>
                         <Text style={styles.continueText}>Continue without signing in &gt;</Text>
