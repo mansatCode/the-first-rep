@@ -20,17 +20,17 @@ const index = () => {
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const signUp = async (email: string, password: string) => {
-        setLoading(true);
-        try {
-            await auth().createUserWithEmailAndPassword(email, password);
-        } catch (e: any) {
-            const err = e as FirebaseError;
-            alert('Registration failed: ' + err.message)
-        } finally {
-            setLoading(false);
-        }
-    }
+    // const signUp = async (email: string, password: string) => {
+    //     setLoading(true);
+    //     try {
+    //         await auth().createUserWithEmailAndPassword(email, password);
+    //     } catch (e: any) {
+    //         const err = e as FirebaseError;
+    //         alert('Registration failed: ' + err.message)
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
 
     const signIn = async (email: string, password: string) => {
         setLoading(true);
@@ -118,11 +118,11 @@ const index = () => {
                 </View>
 
                 {/* Comment out this view when releasing */}
-                {/* <View style={styles.footer}>
+                <View style={styles.footer}>
                     <TouchableOpacity onPress={handleContinueWithoutSignIn}>
                         <Text style={styles.continueText}>Continue without signing in &gt;</Text>
                     </TouchableOpacity>
-                </View> */}
+                </View>
             </View>
         </SafeAreaView>
     );
