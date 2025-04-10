@@ -13,13 +13,15 @@ import LessonCard from '../../components/LessonCard';
 import DumbbellSvg from '../../assets/images/dumbbell.svg';
 import GoalsCard from '../../components/GoalsCard';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 export default function Page() {
   const navigation = useNavigation();
   const [showManageGoals, setShowManageGoals] = useState(false);
 
   const handleLessonPress = () => {
-    navigation.navigate('allLessons');
+    //navigation.navigate('allLessons');
+    router.push('/allLessons');
   };
 
   const handleManageGoalsPress = () => {

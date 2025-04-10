@@ -12,6 +12,7 @@ import SettingSvg from '../../assets/images/settings.svg';
 import SettingItem from '../../components/SettingItem';
 import { settingIcons } from '@/constants/icon';
 import { useNavigation } from 'expo-router';
+import auth from '@react-native-firebase/auth';
 
 export default function Page() {
   const navigation = useNavigation();
@@ -26,6 +27,7 @@ export default function Page() {
 
   const handleLogout = () => {
     console.log('Log Out pressed');
+    auth().signOut();
   };
 
   return (
